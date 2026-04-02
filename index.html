@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NightWhispers - Paranormal Encounters</title>
-    <!-- Modern Fonts -->
+    <title>NightWhispers - Desktop</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -19,193 +17,206 @@
         <div class="overlay-fog"></div>
     </div>
 
-    <!-- Main Mobile App Container for Premium Look -->
-    <main class="app-container">
-
-        <!-- Top Header -->
-        <header class="top-nav">
-            <h1 class="logo glow-text">NightWhispers</h1>
-            <div class="header-actions">
-                <button class="icon-btn" id="btn-premium" title="Upgrade to Premium"><i data-lucide="crown"></i></button>
+    <!-- Authentication Overlay -->
+    <div id="auth-overlay" class="auth-wrapper glass-panel-flat">
+        <div class="auth-content text-center">
+            <i data-lucide="ghost" style="width: 64px; height: 64px; margin: 0 auto; color: var(--primary-glow)"></i>
+            <h1 class="logo glow-text mt-4 mb-4" style="font-size:2.5rem;">NightWhispers</h1>
+            <p class="text-dim mb-4 mb-4">Enter the paranormal network.</p>
+            <div class="feed-tabs mb-4">
+                <button class="feed-tab active" id="btn-tab-login" type="button">Login</button>
+                <button class="feed-tab" id="btn-tab-signup" type="button">Sign Up</button>
             </div>
-        </header>
-
-        <!-- Views Container -->
-        <div class="view-container">
-            
-            <!-- Home Feed View -->
-            <section id="view-home" class="view active-view">
-                <div class="feed-header px-4 pt-4 pb-2">
-                    <h2 class="glow-text">Encounters</h2>
-                    <span class="pulse-indicator"><span class="dot"></span> Live</span>
+            <form id="auth-form" class="text-left">
+                <div class="input-group hidden" id="group-username">
+                    <label>Investigator Alias</label>
+                    <input type="text" id="auth-username" placeholder="Choose a bold alias...">
                 </div>
-                
-                <!-- Sub-Navigation Toggle -->
-                <div class="feed-tabs">
-                    <button class="feed-tab active" data-tab="list">Feed</button>
+                <div class="input-group">
+                    <label>Email Transmission</label>
+                    <input type="email" id="auth-email" placeholder="agent@bureau.gov" required>
+                </div>
+                <div class="input-group">
+                    <label>Access Code</label>
+                    <input type="password" id="auth-password" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary glow-btn w-full mt-4" id="btn-auth-submit">Enter the Void</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Desktop Sticky Navigation -->
+    <header class="top-nav-desktop glass-panel-flat">
+        <div class="nav-brand">
+            <i data-lucide="ghost" style="color:var(--primary-glow)"></i>
+            <h1 class="logo glow-text">NightWhispers</h1>
+        </div>
+        <nav class="nav-links">
+            <a href="#feed-section" class="nav-item"><i data-lucide="layers"></i> Feed</a>
+            <a href="#map-section" class="nav-item"><i data-lucide="map"></i> Map</a>
+            <a href="#upload-section" class="nav-item"><i data-lucide="upload-cloud"></i> Transmit Data</a>
+            <a href="#profile-section" class="nav-item"><i data-lucide="user"></i> Agency Profile</a>
+        </nav>
+        <div class="nav-actions">
+            <button class="btn-gold-outline" id="btn-premium"><i data-lucide="crown" style="width:16px;height:16px"></i> Get Premium</button>
+        </div>
+    </header>
+
+    <!-- Desktop Layout Wrapper -->
+    <div class="desktop-layout">
+        
+        <!-- Main Scrolling Content -->
+        <main class="main-content">
+            
+            <!-- Hero / Feed Section -->
+            <section id="feed-section" class="content-section pt-4">
+                <div class="section-header">
+                    <div>
+                        <h2 class="glow-text text-xl">Global Encounters</h2>
+                        <p class="text-dim">Tracking paranormal activity in real time.</p>
+                    </div>
+                </div>
+
+                <div class="feed-tabs mt-4" style="max-width: 400px;">
+                    <button class="feed-tab active" data-tab="list">Activity Feed</button>
                     <button class="feed-tab" data-tab="media">Media Vault</button>
                 </div>
 
-                <!-- Feed List -->
-                <div class="feed-list" id="feed-list">
-                    <!-- Cards will be injected by JavaScript -->
+                <div class="feed-list desktop-grid" id="feed-list">
+                    <!-- Cards via JS -->
                 </div>
 
-                <!-- Media Grid -->
                 <div class="media-grid hidden" id="media-grid">
-                    <!-- Images and Videos injected by JavaScript -->
+                    <!-- Media via JS -->
                 </div>
             </section>
 
-            <!-- Map View -->
-            <section id="view-map" class="view">
-                <div class="map-wrapper">
-                    <!-- Custom Fake Map using bg image -->
-                    <div class="map-surface">
-                        <!-- Pins injected by JS -->
-                        <div id="map-pins-container"></div>
+            <!-- Map Section -->
+            <section id="map-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="glow-text text-xl">Haunted Radar</h2>
+                </div>
+                <div class="map-container-desktop glass-panel">
+                    <div class="map-wrapper-desktop">
+                        <div class="map-surface">
+                            <div id="map-pins-container"></div>
+                        </div>
+                    </div>
+                    <div class="map-side-panel">
+                        <h3 id="panel-title">Select an anomaly</h3>
+                        <p id="panel-story" class="text-sm text-dim mt-2">Engage with glowing red signatures to reveal details.</p>
+                        <div class="risk-badge hidden" id="panel-risk">Risk: <span class="risk-level">Unknown</span></div>
                     </div>
                 </div>
-                <div class="map-overlay-panel" id="map-info-panel">
-                    <!-- Info about clicked haunted location -->
-                    <h3 id="panel-title">Select a location</h3>
-                    <p id="panel-story" class="text-sm text-dim">Tap a glowing red pin to reveal its dark history...</p>
-                    <div class="risk-badge hidden" id="panel-risk">Risk: <span class="risk-level">Unknown</span></div>
-                </div>
             </section>
 
-            <!-- Upload View -->
-            <section id="view-upload" class="view">
-                <div class="upload-container glass-panel">
-                    <h2>Record Encounter</h2>
-                    <p class="text-dim text-sm mb-4">Submit your evidence securely. The truth is out there.</p>
+            <!-- Upload Section -->
+            <section id="upload-section" class="content-section">
+                <div class="section-header">
+                    <h2 class="glow-text text-xl">Submit Evidence</h2>
+                </div>
+                <div class="upload-container desktop-form glass-panel">
                     <form id="encounter-form">
-                        <div class="input-group">
-                            <label>Encounter Title</label>
-                            <input type="text" placeholder="e.g. Shadow figure in the woods..." required>
+                        <div class="form-grid">
+                            <div class="form-col">
+                                <div class="input-group">
+                                    <label>Encounter Title</label>
+                                    <input type="text" placeholder="e.g. Shadow figure in the woods..." required>
+                                </div>
+                                <div class="input-group">
+                                    <label>Location</label>
+                                    <input type="text" value="34°03'23.0N 118°15'04.5W" readonly class="input-dim">
+                                </div>
+                                <div class="input-group">
+                                    <label>Encounter Type</label>
+                                    <select>
+                                        <option value="Ghost">Ghost / Spirit</option>
+                                        <option value="Cryptid">Cryptid</option>
+                                        <option value="UFO">UFO / UAP</option>
+                                        <option value="Demon">Demonic</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <label>Attached Media</label>
+                                <div class="upload-buttons mb-4">
+                                    <button type="button" class="upload-btn"><i data-lucide="camera"></i> Photo</button>
+                                    <button type="button" class="upload-btn"><i data-lucide="video"></i> Video</button>
+                                    <button type="button" class="upload-btn"><i data-lucide="mic"></i> Audio</button>
+                                </div>
+                                <div class="input-group" style="height:100%;">
+                                    <label>Description / Story</label>
+                                    <textarea rows="4" style="height:100%" placeholder="What exactly did you see?"></textarea>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group">
-                            <label>Location</label>
-                            <input type="text" value="Detecting location..." readonly class="input-dim">
-                        </div>
-                        <div class="input-group">
-                            <label>Encounter Type</label>
-                            <select>
-                                <option value="Ghost">Ghost / Spirit</option>
-                                <option value="Cryptid">Cryptid (Bigfoot, Mothman)</option>
-                                <option value="UFO">UFO / UAP</option>
-                                <option value="Demon">Demonic</option>
-                                <option value="Other">Other Anomalies</option>
-                            </select>
-                        </div>
-                        
-                        <div class="upload-buttons">
-                            <button type="button" class="upload-btn"><i data-lucide="camera"></i> Photo</button>
-                            <button type="button" class="upload-btn"><i data-lucide="video"></i> Video</button>
-                            <button type="button" class="upload-btn"><i data-lucide="mic"></i> Audio</button>
-                        </div>
-                        
-                        <div class="input-group">
-                            <label>Description / Story</label>
-                            <textarea rows="4" placeholder="What exactly did you see?"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn-primary glow-btn w-full mt-4">Submit Evidence</button>
+                        <button type="submit" class="btn-primary glow-btn w-full mt-4">Transmit to Network</button>
                     </form>
                 </div>
             </section>
 
-            <!-- Messages View -->
-            <section id="view-messages" class="view">
-                <div id="messages-list-view">
-                    <div class="feed-header px-4 pt-4">
-                        <h2>Friends & Team</h2>
-                        <span class="pulse-indicator text-green"><span class="dot dot-green"></span> Online</span>
-                    </div>
-                    <div class="friends-list" id="friends-list">
-                        <!-- Friend items injected by JS -->
-                    </div>
+            <!-- Profile Section -->
+            <section id="profile-section" class="content-section mb-6">
+                <div class="section-header">
+                    <h2 class="glow-text text-xl">Agency Profile</h2>
                 </div>
-
-                <!-- Active Chat Dialog -->
-                <div id="chat-dialog" class="chat-dialog hidden">
-                    <div class="chat-header glass-panel-flat">
-                        <button class="icon-btn" id="btn-close-chat" title="Back"><i data-lucide="chevron-left"></i></button>
-                        <div class="chat-header-info">
-                            <h3 id="chat-friend-name">Agent</h3>
-                            <span class="text-xs text-green" id="chat-friend-status">Online</span>
+                <div class="profile-layout glass-panel">
+                    <div class="profile-info text-center">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=NightWhispers" alt="Profile" class="profile-avatar-lg">
+                        <h2 class="username">Agent_Mulder99</h2>
+                        <div class="rank-badge">
+                            <i data-lucide="shield"></i> 
+                            <span class="rank-name glow-text-blue">Investigator</span>
                         </div>
-                        <button class="icon-btn" title="Voice Call"><i data-lucide="phone"></i></button>
+                        <p class="stats text-dim mt-2">12 Encounters • 542 Votes</p>
                     </div>
-                    <div class="chat-messages" id="chat-messages">
-                        <!-- Messages injected by JS -->
-                    </div>
-                    <form id="chat-input-form" class="chat-input-area glass-panel-flat">
-                        <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off" required>
-                        <button type="submit" class="btn-send icon-btn"><i data-lucide="send"></i></button>
-                    </form>
-                </div>
-            </section>
-
-            <!-- Profile View -->
-            <section id="view-profile" class="view">
-                <div class="profile-header glass-panel">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=NightWhispers" alt="Profile" class="profile-avatar">
-                    <h2 class="username">Agent_Mulder99</h2>
-                    <div class="rank-badge">
-                        <i data-lucide="shield"></i> 
-                        <span class="rank-name glow-text-blue">Investigator</span>
-                    </div>
-                    <p class="stats text-dim mt-2">12 Encounters Reported • 542 Believable Votes</p>
-                </div>
-                
-                <div class="settings-list mt-4">
-                    <div class="settings-item">
-                        <span><i data-lucide="bell"></i> Nearby Alerts</span>
-                        <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
-                    </div>
-                    <div class="settings-item">
-                        <span><i data-lucide="lock"></i> Private Mode</span>
-                        <label class="switch"><input type="checkbox"><span class="slider"></span></label>
-                    </div>
-                    <div class="settings-item premium-upgrade">
-                        <div>
-                            <span class="text-gold"><i data-lucide="crown"></i> NightWhispers+</span>
-                            <p class="text-xs text-dim">Advanced Radar & Ad-Free ($3.99/mo)</p>
+                    <div class="profile-settings">
+                        <div class="settings-item">
+                            <span><i data-lucide="bell"></i> Nearby Alerts</span>
+                            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
                         </div>
-                        <button class="btn-gold-outline text-sm">Upgrade</button>
+                        <div class="settings-item">
+                            <span><i data-lucide="lock"></i> Private Mode</span>
+                            <label class="switch"><input type="checkbox"><span class="slider"></span></label>
+                        </div>
                     </div>
                 </div>
             </section>
 
-        </div>
+        </main>
 
-        <!-- Sticky Bottom Navigation -->
-        <nav class="bottom-nav">
-            <button class="nav-item active" data-target="view-home">
-                <i data-lucide="home"></i>
-                <span>Feed</span>
-            </button>
-            <button class="nav-item" data-target="view-map">
-                <i data-lucide="map"></i>
-                <span>Radar</span>
-            </button>
-            <button class="nav-item fab-button" data-target="view-upload">
-                <div class="fab-inner">
-                    <i data-lucide="plus"></i>
+        <!-- Right Sidebar (Chat & Friends) -->
+        <aside class="right-sidebar glass-panel-flat">
+            <div class="sidebar-header">
+                <h3>Live Network</h3>
+                <span class="pulse-indicator text-green"><span class="dot dot-green"></span></span>
+            </div>
+            
+            <div id="friends-list" class="friends-list-desktop">
+                <!-- Javascript will inject online friends here -->
+            </div>
+
+            <!-- Chat Dialog Window (In-sidebar) -->
+            <div id="chat-dialog" class="chat-sidebar-view hidden">
+                <div class="chat-header glass-panel-flat">
+                    <button class="icon-btn" id="btn-close-chat" title="Back"><i data-lucide="chevron-left"></i></button>
+                    <div class="chat-header-info">
+                        <h4 id="chat-friend-name" style="margin:0;">Agent</h4>
+                        <span class="text-xs text-green" id="chat-friend-status">Online</span>
+                    </div>
                 </div>
-            </button>
-            <button class="nav-item" data-target="view-messages">
-                <i data-lucide="message-circle"></i>
-                <span>Chat</span>
-            </button>
-            <button class="nav-item" data-target="view-profile">
-                <i data-lucide="user"></i>
-                <span>Profile</span>
-            </button>
-        </nav>
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Javascript messages inside sidebar -->
+                </div>
+                <form id="chat-input-form" class="chat-input-area border-top">
+                    <input type="text" id="chat-input" placeholder="Type..." autocomplete="off" required>
+                    <button type="submit" class="btn-send btn-send-sm"><i data-lucide="send" style="width:16px;height:16px"></i></button>
+                </form>
+            </div>
+        </aside>
 
-    </main>
+    </div>
     
     <script src="app.js"></script>
 </body>
