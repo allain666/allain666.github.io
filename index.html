@@ -15,6 +15,13 @@
     <!-- Background Layer -->
     <div class="app-background">
         <div class="overlay-fog"></div>
+        <div class="lightning-flash"></div>
+        
+        <!-- Flying Ghosts -->
+        <div class="ghost-wrapper ghost-1"><div class="ghost-inner"></div></div>
+        <div class="ghost-wrapper ghost-2"><div class="ghost-inner"></div></div>
+        <div class="ghost-wrapper ghost-3"><div class="ghost-inner"></div></div>
+
         <!-- Ambient Glowing Orbs -->
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
@@ -33,17 +40,18 @@
             </div>
             <form id="auth-form" class="text-left">
                 <div class="input-group hidden" id="group-username">
-                    <label>Investigator Alias</label>
+                    <label>Username</label>
                     <input type="text" id="auth-username" placeholder="Choose a bold alias...">
                 </div>
                 <div class="input-group">
-                    <label>Email Transmission</label>
-                    <input type="email" id="auth-email" placeholder="agent@bureau.gov" required>
+                    <label id="label-email-username">Email or Username</label>
+                    <input type="text" id="auth-email" placeholder="agent@bureau.gov" required>
                 </div>
                 <div class="input-group">
                     <label>Access Code</label>
                     <input type="password" id="auth-password" placeholder="••••••••" required>
                 </div>
+                <p id="auth-error" class="hidden" style="color: var(--danger-red); font-size: 0.85rem; margin-top: 10px;"></p>
                 <button type="submit" class="btn-primary glow-btn w-full mt-4" id="btn-auth-submit">Enter the Void</button>
             </form>
         </div>
@@ -61,8 +69,9 @@
             <a href="#upload-section" class="nav-item"><i data-lucide="upload-cloud"></i> Transmit Data</a>
             <a href="#profile-section" class="nav-item"><i data-lucide="user"></i> Agency Profile</a>
         </nav>
-        <div class="nav-actions">
+        <div class="nav-actions" style="display:flex; gap:10px;">
             <button class="btn-gold-outline" id="btn-premium"><i data-lucide="crown" style="width:16px;height:16px"></i> Get Premium</button>
+            <button class="icon-btn text-dim" id="btn-logout" title="Disconnect Device"><i data-lucide="log-out"></i></button>
         </div>
     </header>
 
@@ -98,7 +107,31 @@
                     </div>
                 </div>
 
-                <div class="feed-tabs mt-4" style="max-width: 400px;">
+                <div class="stories-carousel-container mt-4 mb-6">
+                    <div class="stories-track" id="stories-track">
+                        <div class="story-circle mine" id="btn-add-story">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=NightWhispers" alt="Me">
+                            <div class="story-add-icon"><i data-lucide="plus" style="width:14px; height:14px;"></i></div>
+                            <span class="story-name">Add Story</span>
+                        </div>
+                        <!-- Virtual Stories are added here via JS -->
+                    </div>
+                </div>
+
+                <!-- Feed Composer -->
+                <div class="feed-composer glass-panel mb-6">
+                    <div class="composer-top">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=NightWhispers" alt="User" class="avatar">
+                        <input type="text" id="composer-input" placeholder="Share an encounter or report activity...">
+                    </div>
+                    <div class="composer-bottom mt-4">
+                        <button class="composer-btn" id="btn-composer-live"><i data-lucide="video" style="color:var(--danger-red)"></i> Go Live</button>
+                        <button class="composer-btn" id="btn-composer-photo"><i data-lucide="image" style="color:var(--success-green)"></i> Photo/Video</button>
+                        <button class="composer-btn" id="btn-composer-checkin"><i data-lucide="map-pin" style="color:var(--gold)"></i> Check in</button>
+                    </div>
+                </div>
+
+                <div class="feed-tabs mb-4" style="max-width: 400px;">
                     <button class="feed-tab active" data-tab="list">Activity Feed</button>
                     <button class="feed-tab" data-tab="media">Media Vault</button>
                 </div>
@@ -239,6 +272,39 @@
 
     </div>
     
+    <!-- Go Live Modal -->
+    <div id="live-modal" class="live-modal-wrapper hidden">
+        <div class="live-vid-container">
+            <video id="live-video" autoplay playsinline muted></video>
+            <div id="live-fallback" class="live-fallback hidden">
+                <i data-lucide="radio" style="width: 64px; height: 64px; color: var(--danger-red); opacity: 0.5;" class="mb-4"></i>
+                <h2 class="glow-text text-xl">Camera Offline</h2>
+                <p class="text-dim">Simulating visual frequency...</p>
+            </div>
+            
+            <div class="live-top-bar">
+                <div class="live-badge pulse-indicator" style="background:rgba(255,42,42,0.8); color:white; padding: 6px 12px; border-radius: 6px;"><span class="dot" style="background:white; box-shadow: 0 0 8px white;"></span> LIVE</div>
+                <div class="live-viewers"><i data-lucide="eye" style="width:16px;height:16px;"></i> <span id="live-view-count">0</span></div>
+            </div>
+            
+            <div class="live-bottom-controls">
+                <button class="btn-primary glow-btn" id="btn-end-live" style="background: var(--danger-red); border: 1px solid #ff5555; box-shadow: 0 0 20px rgba(255,42,42,0.4);">End Transmission</button>
+            </div>
+        </div>
+        
+        <div class="live-sidebar glass-panel-flat">
+            <div class="sidebar-header">
+                <h3>Live Chat</h3>
+            </div>
+            <div class="chat-messages" id="live-chat-messages" style="flex:1; background:rgba(0,0,0,0.4);">
+                <div class="chat-bubble" style="background:rgba(255,255,255,0.05); width:100%;"><span class="text-gold text-xs block" style="margin-bottom:4px">System</span> Broadcast initialized... Waiting for viewers.</div>
+            </div>
+            <div class="chat-input-area border-top">
+                <input type="text" placeholder="Incoming chat read-only..." disabled style="background: rgba(0,0,0,0.9); opacity:0.6;">
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
